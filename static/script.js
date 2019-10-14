@@ -16,54 +16,57 @@ document.onkeydown = function (event) {
     console.log(key_press);
 };
 
-function move_up() {
+function moveUp() {
     const request = new XMLHttpRequest();
     request.open("GET", "/forward", true);
     request.send();
     console.log("Forward");
 }
 
-function move_down() {
+function moveDown() {
     const request = new XMLHttpRequest();
     request.open("GET", "/backward", true);
     request.send();
     console.log("Backward");
 }
 
-function move_left() {
+function moveLeft() {
     const request = new XMLHttpRequest();
     request.open("GET", "/left", true);
     request.send();
     console.log("Left");
 }
 
-function move_right() {
+function moveRight() {
     const request = new XMLHttpRequest();
     request.open("GET", "/right", true);
     request.send();
     console.log("Right");
 }
 
-function move_stop() {
+function moveStop() {
     let request = new XMLHttpRequest();
     request.open("GET", "/stop", true);
     request.send();
     console.log("Stop");
 }
 
-function print_change() {
+window.onload=textWarning;
+function textWarning() {
     const $text = $('#text_warning');
     const numbers = ["Normally functioning", "Left Object Detected", "Right Object Detected"];
     let i = 1;
     for (; i <= numbers.length; ++i) {
         console.log($text);
-        (function (index) {
-            setTimeout(function () {
-                $text.html(numbers[index - 1]);
-            }, (i - 1) * 1000);
-        })(i);
+
+        // (function (index) {
+        //     setTimeout(function () {
+        //         $text.html(numbers[index - 1]);
+        //     }, (i - 1) * 1000);
+        // })(i);
         // check for Git
     }
 }
+
 
 
