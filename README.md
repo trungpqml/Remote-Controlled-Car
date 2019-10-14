@@ -1,23 +1,18 @@
 RemoteControlCar
 
-1. Control via 2 terminal, ssh via Wifi
+1. Control on webapp, ssh via Wifi
 
-Camera Stream
-1. run command in terminal      "python camera.py"
-2. open a web browser in a laptop
-3. enter the IP address with port 8000
 
-Motor Control
+Webapp Operation:
 
-1. run command in terminal      "python motor.py"
-2. enter proper keys to control the motor
+1. run command in terminal      "sudo python3 app.py".
+2. enter corresponding keys to control the motor/pressing button on UI.
+3. press turn off to terminate server.
 
 Key list
-w = run forward
-s = run backward
-a = turn left
-d = turn right
+w/upward key = run forward
+s/downward key = run backward
+a/left key = turn left
+d/right key = turn right
 x = stop
-j = low speed
-k = medium speed
-l = high speed
+
