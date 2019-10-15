@@ -9,10 +9,10 @@ document.onkeydown = function (event) {
     //status.innerHTML = "DOWN Event Fired For : " + key_press;
 
     if (key_code === 38 || key_press === "W") move_up();
-    else if (key_code === 37 || key_press === "A") move_left();
-    else if (key_code === 40 || key_press === "S") move_down();
-    else if (key_code === 39 || key_press === "D") move_right();
-    else if (key_code === 16 || key_press === "X") move_stop();
+    else if (key_code === 37 || key_press === "A") moveLeft();
+    else if (key_code === 40 || key_press === "S") moveDown();
+    else if (key_code === 39 || key_press === "D") moveRight();
+    else if (key_code === 16 || key_press === "X") moveStop();
     console.log(key_press);
 };
 
@@ -68,5 +68,11 @@ function textWarning() {
     }
 }
 
+function distance() {
+    let request = new XMLHttpRequest();
+    request.open("GET", "/distance", true);
+    request.send();
+    console.log("Distance: ");
+}
 
 
