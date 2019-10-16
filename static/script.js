@@ -8,11 +8,11 @@ document.onkeydown = function (event) {
     const status = document.getElementById('status');
     //status.innerHTML = "DOWN Event Fired For : " + key_press;
 
-    if (key_code === 38 || key_press === "W") move_up();
-    else if (key_code === 37 || key_press === "A") move_left();
-    else if (key_code === 40 || key_press === "S") move_down();
-    else if (key_code === 39 || key_press === "D") move_right();
-    else if (key_code === 16 || key_press === "X") move_stop();
+    if (key_code === 38 || key_press === "W") moveUp();
+    else if (key_code === 37 || key_press === "A") moveLeft();
+    else if (key_code === 40 || key_press === "S") moveDown();
+    else if (key_code === 39 || key_press === "D") moveRight();
+    else if (key_code === 16 || key_press === "X") moveStop();
     console.log(key_press);
 };
 
@@ -51,22 +51,54 @@ function moveStop() {
     console.log("Stop");
 }
 
-window.onload=textWarning;
-function textWarning() {
-    const $text = $('#text_warning');
-    const numbers = ["Normally functioning", "Left Object Detected", "Right Object Detected"];
-    let i = 1;
-    for (; i <= numbers.length; ++i) {
-        console.log($text);
 
-        // (function (index) {
-        //     setTimeout(function () {
-        //         $text.html(numbers[index - 1]);
-        //     }, (i - 1) * 1000);
-        // })(i);
-        // check for Git
-    }
+// $(document).ready(distance());
+
+// $(function () {
+//     $('a#process_input').bind('click', function () {
+//         $.getJSON('/background_process', {
+//             proglang: $('input[name="proglang"]').val(),
+//         }, function (data) {
+//             $("#result").text(data.result);
+//         });
+//         return false;
+//     });
+// });
+
+const sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+};
+
+// print distance with 1 sec sleep
+let i=0, runTime = 100, range = 15;
+function loopDistance() {
+    setTimeout(function () {
+        $(document).ready(function() {
+            $.get("/get_dist",
+                function (data) {
+                    if (data.result>range) $('#dist').text("Object spotted");
+                    else $('#dist').text("READY");
+                    console.log(data.result);
+                })
+        });
+        i++;
+        if(i<runTime) loopDistance();
+    }, 1000);
 }
+loopDistance(); //call the function for the first run
 
+$('#dist').text("READY");
 
-
+// Client must have a loop to send request (Get)
+// The server receives and returns the distance accordingly
+//
+// Loop to print the distance
+// for (let i = 0; i < 10; i++) {
+//     $('#dist').click(function () {
+//         $.get("/get_dist",
+//             function (data) {
+//                 $('#result').text(data.result);
+//                 console.log(data.result);
+//             })
+//     });
+// }

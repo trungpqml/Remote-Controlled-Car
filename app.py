@@ -1,31 +1,35 @@
 #!/usr/bin/env python
+import random
 import motor
 import os
-import time
+# import led
 from importlib import import_module
 
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
 
 # import camera driver
-if os.environ.get('CAMERA'):
-    Camera = import_module('camera_' + os.environ['CAMERA']).Camera
-else:
-    from camera import Camera
+# if os.environ.get('CAMERA'):
+#     Camera = import_module('camera_' + os.environ['CAMERA']).Camera
+# else:
+#     from camera import Camera
 
 # Raspberry Pi camera module (requires picamera package)
-# from camera_pi import Camera
-
+from camera import Camera
 
 app = Flask(__name__)
 app.secret_key = "vth"
 
-LEFT, RIGHT, FORWARD, BACKWARD, STOP = "left", "right", "forward", "backward", "stop"
+LEFT, RIGHT, FORWARD, BACKWARD, STOP = "left", "right", \
+                                                          "forward", "backward", "stop"
+                                                          # "warning", "distance"
 AVAILABLE_COMMANDS = {
     'Left': LEFT,
     'Forward': FORWARD,
     'Right': RIGHT,
     'Backward': BACKWARD,
-    'Stop': STOP
+    'Stop': STOP,
+    # 'Warning': WARNING,
+    # 'Distance': DISTANCE
 }
 
 
@@ -38,7 +42,8 @@ def index():
 def gen(camera):
     while True:
         """This function generates the frame for displaying the video. The 'yield' increments the iteration by the 
-        next, therefore, the image overlaps. The frame variable is used later in the function video_feed() """
+        next, therefore, the image overlaps. The frame variable is used later in the function video_feed()"""
+        # led.measure()
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
@@ -53,113 +58,38 @@ def video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-# GPIO Mode
-GPIO.setmode(GPIO.BCM)
-# Set GPIO Pins
-LED_L = 2
-LED_R = 4
-# Set GPIO Pins
-TRIG = 18
-ECHO = 24
-LED = 23
-LED_S = 3
-GPIO.setup(TRIG, GPIO.OUT)
-GPIO.setup(ECHO, GPIO.IN)
-# LED setup
-GPIO.setwarnings(False)
-GPIO.setup(LED_L, GPIO.OUT)
-GPIO.setup(LED_R, GPIO.OUT)
-GPIO.setup(LED, GPIO.OUT)
-GPIO.setup(LED_S, GPIO.OUT)
-
-
-def led():
-    GPIO.output(LED_L, GPIO.LOW)
-    GPIO.output(LED_R, GPIO.LOW)
-    GPIO.output(LED_S, GPIO.LOW)
-
-
-def led_l():
-    GPIO.output(LED_L, GPIO.HIGH)
-    GPIO.output(LED_R, GPIO.LOW)
-    GPIO.output(LED_S, GPIO.LOW)
-
-
-def led_r():
-    GPIO.output(LED_R, GPIO.HIGH)
-    GPIO.output(LED_L, GPIO.LOW)
-    GPIO.output(LED_S, GPIO.LOW)
-
-
-def led_s():
-    GPIO.output(LED_R, GPIO.LOW)
-    GPIO.output(LED_L, GPIO.LOW)
-    GPIO.output(LED_S, GPIO.HIGH)
-
-
-def distance():
-    GPIO.output(TRIG, False)
-    time.sleep(0.1)
-    print("Measuring...")
-    GPIO.output(TRIG, True)
-    time.sleep(0.00001)
-    GPIO.output(TRIG, False)
-    start = time.time()
-    stop = time.time()
-
-    # Save StartTime
-    while GPIO.input(ECHO) == 0:
-        start = time.time()
-
-    # Save StopTime
-    while GPIO.input(ECHO) == 1:
-        stop = time.time()
-    return (stop - start) / 0.000058  # cm
+# @app.route('/background_process')
+# def background_process():
+#     try:
+#         lang = request.args.get('proglang', default=0, type=int)
+#         if lang > 15:
+#             return jsonify(result='Obstacle Spotted')
+#         else:
+#             return jsonify(result='Nothing')
+#     except Exception as e:
+#         return str(e)
 
 
 @app.route('/<cmd>')
 def command(cmd=None):
     if cmd == STOP:
-        print("Stop Pressed")
-        led_s()
-        measure()
+        # led_s()
+        # measure()
         motor.stop()
     elif cmd == FORWARD:
-        print("Up Pressed")
-        led()
-        measure()
+        # led()
+
         motor.forward()
     elif cmd == BACKWARD:
-        print("Down Pressed")
-        led()
-        measure()
+        # led()
         motor.backward()
     elif cmd == LEFT:
-        print("Left Pressed")
-        led_l()
-        measure()
+        # led_l()
         motor.left()
-    else:
-        print("Right Pressed")
-        led_r()
-        measure()
+    elif cmd == RIGHT:
+        # led_r()
         motor.right()
-    response = "Moving {}".format(cmd.capitalize())
-    return response, 200, {'Content-Type': 'text/plain'}
-
-
-def measure():
-    try:
-        while True:
-            dist = distance()
-            print("Distance: %.2f cm" % dist)
-            if dist < 15:
-                GPIO.output(LED, GPIO.HIGH)
-            else:
-                GPIO.output(LED, GPIO.LOW)
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("Stop measurement")
+    return "Success", 200, {'Content-Type': 'text/plain'}
 
 
 @app.route('/log_out')
@@ -170,6 +100,17 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
     return render_template("log_out.html")
+
+
+def dist():             # will be replaced with led.measure()
+    return (random.random())*100
+
+
+@app.route('/get_dist/', methods=['GET', 'POST'])
+def distance():
+    if request.method == 'GET':
+        request.args.get('dist', default=0, type=int)
+        return jsonify(result=dist())
 
 
 if __name__ == '__main__':
