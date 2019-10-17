@@ -2,10 +2,10 @@
 import random
 import motor
 import os
-# import led
+import led
 from importlib import import_module
 
-from flask import Flask, render_template, Response, request, jsonify, url_for
+from flask import Flask, render_template, Response, request, jsonify
 
 # import camera driver
 # if os.environ.get('CAMERA'):
@@ -14,7 +14,7 @@ from flask import Flask, render_template, Response, request, jsonify, url_for
 #     from camera import Camera
 
 # Raspberry Pi camera module (requires picamera package)
-from camera import Camera
+from camera_pi import Camera
 
 app = Flask(__name__)
 app.secret_key = "vth"
@@ -32,6 +32,7 @@ AVAILABLE_COMMANDS = {
 @app.route('/')
 def index():
     """Home page"""
+    led.measure()
     return render_template('index.html', commands=AVAILABLE_COMMANDS)
 
 
@@ -57,21 +58,19 @@ def video_feed():
 @app.route('/<cmd>')
 def command(cmd=None):
     if cmd == STOP:
-        # led_s()
-        # measure()
+        led.led_stop()
         motor.stop()
     elif cmd == FORWARD:
-        # led()
-
+        led.led_off()
         motor.forward()
     elif cmd == BACKWARD:
-        # led()
+        led.led_off()
         motor.backward()
     elif cmd == LEFT:
-        # led_l()
+        led.led_left()
         motor.left()
     elif cmd == RIGHT:
-        # led_r()
+        led.led_right()
         motor.right()
     return "Success", 200, {'Content-Type': 'text/plain'}
 
@@ -86,7 +85,7 @@ def shutdown_server():
     return render_template("log_out.html")
 
 
-def dist():             # will be replaced with led.measure()
+def dist():             # will be replaced with led.distance()
     return (random.random())*100
 
 
@@ -94,7 +93,7 @@ def dist():             # will be replaced with led.measure()
 def get_dist():
     if request.method == 'GET':
         request.args.get('dist', default=0, type=int)
-        return jsonify(result=dist())
+        return jsonify(result=led.distance())
 
 
 if __name__ == '__main__':

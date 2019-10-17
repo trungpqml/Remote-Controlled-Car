@@ -52,7 +52,7 @@ function moveStop() {
 // The server receives and returns the distance accordingly
 let i=0,                                // counter
     runTime = 100,                      // Seconds to run
-    range = 50;                         // Proximity barrier (in meter)
+    range = 15;                         // Proximity barrier (in cm)
 function loopDistance() {
     setTimeout(function () {
         $(document).ready(function() {
@@ -67,7 +67,7 @@ function loopDistance() {
         if(i<runTime) loopDistance();
     }, 1000);
 }
-loopDistance(); //call the function for the first run
+loopDistance();                         // call the function for the first run
 
 $('#dist').text("READY");
 
