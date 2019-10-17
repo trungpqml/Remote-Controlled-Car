@@ -1,19 +1,15 @@
 document.onkeydown = function (event) {
-    const key_press = String.fromCharCode(event.keyCode);
-    //document.getElementById('kp').innerHTML = key_press;
-
-    const key_code = event.keyCode;
-    //document.getElementById('kc').innerHTML = key_code;
+    const code = event.code;
 
     const status = document.getElementById('status');
-    //status.innerHTML = "DOWN Event Fired For : " + key_press;
+    //status.innerHTML = "DOWN Event Fired For : " + code;
 
-    if (key_code === 38 || key_press === "W") moveUp();
-    else if (key_code === 37 || key_press === "A") moveLeft();
-    else if (key_code === 40 || key_press === "S") moveDown();
-    else if (key_code === 39 || key_press === "D") moveRight();
-    else if (key_code === 16 || key_press === "X") moveStop();
-    console.log(key_press);
+    if (code === "ArrowUp" || code === "KeyW") moveUp();
+    else if (code === "ArrowLeft" || code === "KeyA") moveLeft();
+    else if (code === "ArrowDown" || code === "KeyS") moveDown();
+    else if (code === "ArrowRight" || code === "KeyD") moveRight();
+    else if (code === "Space" || code === "KeyX") moveStop();
+    console.log(code);
 };
 
 function moveUp() {
@@ -51,32 +47,18 @@ function moveStop() {
     console.log("Stop");
 }
 
-
-// $(document).ready(distance());
-
-// $(function () {
-//     $('a#process_input').bind('click', function () {
-//         $.getJSON('/background_process', {
-//             proglang: $('input[name="proglang"]').val(),
-//         }, function (data) {
-//             $("#result").text(data.result);
-//         });
-//         return false;
-//     });
-// });
-
-const sleep = (milliseconds) => {
-    return new Promise(resolve => setTimeout(resolve, milliseconds))
-};
-
 // print distance with 1 sec sleep
-let i=0, runTime = 100, range = 15;
+// Client must have a loop to send request (Get)
+// The server receives and returns the distance accordingly
+let i=0,                                // counter
+    runTime = 100,                      // Seconds to run
+    range = 50;                         // Proximity barrier (in meter)
 function loopDistance() {
     setTimeout(function () {
         $(document).ready(function() {
             $.get("/get_dist",
                 function (data) {
-                    if (data.result>range) $('#dist').text("Object spotted");
+                    if (data.result>range) $('#dist').text("Object Spotted");
                     else $('#dist').text("READY");
                     console.log(data.result);
                 })
@@ -92,7 +74,7 @@ $('#dist').text("READY");
 // Client must have a loop to send request (Get)
 // The server receives and returns the distance accordingly
 //
-// Loop to print the distance
+// Successful loop to print the distance
 // for (let i = 0; i < 10; i++) {
 //     $('#dist').click(function () {
 //         $.get("/get_dist",

@@ -33,7 +33,7 @@ AVAILABLE_COMMANDS = {
 }
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def index():
     """Home page"""
     return render_template('index.html', commands=AVAILABLE_COMMANDS)
@@ -56,18 +56,6 @@ def video_feed():
     so quickly, it'd look like a video."""
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-
-
-# @app.route('/background_process')
-# def background_process():
-#     try:
-#         lang = request.args.get('proglang', default=0, type=int)
-#         if lang > 15:
-#             return jsonify(result='Obstacle Spotted')
-#         else:
-#             return jsonify(result='Nothing')
-#     except Exception as e:
-#         return str(e)
 
 
 @app.route('/<cmd>')
