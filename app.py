@@ -5,7 +5,7 @@ import os
 # import led
 from importlib import import_module
 
-from flask import Flask, render_template, Response, request, jsonify, redirect, url_for
+from flask import Flask, render_template, Response, request, jsonify, url_for
 
 # import camera driver
 # if os.environ.get('CAMERA'):
@@ -91,7 +91,7 @@ def dist():             # will be replaced with led.measure()
 
 
 @app.route('/get_dist/', methods=['GET', 'POST'])
-def distance():
+def get_dist():
     if request.method == 'GET':
         request.args.get('dist', default=0, type=int)
         return jsonify(result=dist())
