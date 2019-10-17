@@ -19,17 +19,13 @@ from camera import Camera
 app = Flask(__name__)
 app.secret_key = "vth"
 
-LEFT, RIGHT, FORWARD, BACKWARD, STOP = "left", "right", \
-                                                          "forward", "backward", "stop"
-                                                          # "warning", "distance"
+LEFT, RIGHT, FORWARD, BACKWARD, STOP = "left", "right", "forward", "backward", "stop"
 AVAILABLE_COMMANDS = {
     'Left': LEFT,
     'Forward': FORWARD,
     'Right': RIGHT,
     'Backward': BACKWARD,
-    'Stop': STOP,
-    # 'Warning': WARNING,
-    # 'Distance': DISTANCE
+    'Stop': STOP
 }
 
 
