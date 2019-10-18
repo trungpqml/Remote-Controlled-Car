@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 import random
 import motor
-import os
 import led
-from importlib import import_module
 
 from flask import Flask, render_template, Response, request, jsonify
 
-# import camera driver
+"""import camera driver"""
+# import os
+# from importlib import import_module
 # if os.environ.get('CAMERA'):
 #     Camera = import_module('camera_' + os.environ['CAMERA']).Camera
 # else:
@@ -32,7 +32,6 @@ AVAILABLE_COMMANDS = {
 @app.route('/')
 def index():
     """Home page"""
-    led.measure()
     return render_template('index.html', commands=AVAILABLE_COMMANDS)
 
 
@@ -40,7 +39,6 @@ def gen(camera):
     while True:
         """This function generates the frame for displaying the video. The 'yield' increments the iteration by the 
         next, therefore, the image overlaps. The frame variable is used later in the function video_feed()"""
-        # led.measure()
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
@@ -85,7 +83,7 @@ def shutdown_server():
     return render_template("log_out.html")
 
 
-def dist():             # will be replaced with led.distance()
+def dist():             # alternative for led.distance()
     return (random.random())*100
 
 
@@ -94,6 +92,7 @@ def get_dist():
     if request.method == 'GET':
         request.args.get('dist', default=0, type=int)
         return jsonify(result=led.distance())
+        # replace here with dist()
 
 
 if __name__ == '__main__':

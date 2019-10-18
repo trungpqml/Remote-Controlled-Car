@@ -52,13 +52,13 @@ function moveStop() {
 // The server receives and returns the distance accordingly
 let i=0,                                // counter
     runTime = 100,                      // Seconds to run
-    range = 15;                         // Proximity barrier (in cm)
+    range = 40;                         // Proximity barrier (in cm)
 function loopDistance() {
     setTimeout(function () {
         $(document).ready(function() {
             $.get("/get_dist",
                 function (data) {
-                    if (data.result>range) $('#dist').text("Object Spotted");
+                    if (data.result<range) $('#dist').text("Object Spotted");
                     else $('#dist').text("READY");
                     console.log(data.result);
                 })
