@@ -3,7 +3,7 @@ import random
 import motor
 import led
 
-from flask import Flask, render_template, Response, request
+from flask import Flask, render_template, Response, request, jsonify
 
 """import camera driver"""
 # import os
@@ -14,8 +14,7 @@ from flask import Flask, render_template, Response, request
 #     from camera import Camera
 
 # Raspberry Pi camera module (requires picamera package)
-# from camera_pi import Camera
-
+from camera_pi import Camera
 
 app = Flask(__name__)
 app.secret_key = "vth"
@@ -82,6 +81,18 @@ def shutdown_server():
         raise RuntimeError('Not running with the Werkzeug Server')
     func()
     return render_template("log_out.html")
+
+
+def dist():             # alternative for led.distance()
+    return (random.random())*100
+
+
+@app.route('/get_dist/', methods=['GET', 'POST'])
+def get_dist():
+    if request.method == 'GET':
+        request.args.get('dist', default=0, type=int)
+        return jsonify(result=led.distance())
+        # replace here with dist()
 
 
 if __name__ == '__main__':

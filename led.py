@@ -1,7 +1,8 @@
 import time
-#import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
+
 # GPIO Mode
-'''GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 # Set GPIO Pins
 LED_L = 2
 LED_R = 4
@@ -14,7 +15,6 @@ GPIO.setwarnings(False)
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 # LED setup
-GPIO.setwarnings(False)
 GPIO.setup(LED_L, GPIO.OUT)
 GPIO.setup(LED_R, GPIO.OUT)
 GPIO.setup(LED, GPIO.OUT)
@@ -48,7 +48,6 @@ def led_stop():
 def distance():
     GPIO.output(TRIG, False)
     time.sleep(0.1)
-    print("Measuring...")
     GPIO.output(TRIG, True)
     time.sleep(0.00001)
     GPIO.output(TRIG, False)
@@ -64,7 +63,7 @@ def distance():
         stop = time.time()
     return (stop - start) / 0.000058  # cm
 
-    
+
 def measure():
     try:
         while True:
