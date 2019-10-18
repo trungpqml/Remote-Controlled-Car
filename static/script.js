@@ -4,6 +4,12 @@ document.onkeydown = function (event) {
     const status = document.getElementById('status');
     //status.innerHTML = "DOWN Event Fired For : " + code;
 
+    if (key_code === 38 || key_press === "W") move_up();
+    else if (key_code === 37 || key_press === "A") moveLeft();
+    else if (key_code === 40 || key_press === "S") moveDown();
+    else if (key_code === 39 || key_press === "D") moveRight();
+    else if (key_code === 16 || key_press === "X") moveStop();
+    console.log(key_press);
     if (code === "ArrowUp" || code === "KeyW") moveUp();
     else if (code === "ArrowLeft" || code === "KeyA") moveLeft();
     else if (code === "ArrowDown" || code === "KeyS") moveDown();
