@@ -10,6 +10,7 @@ TRIG = 18
 ECHO = 24
 LED = 23
 LED_S = 3
+GPIO.setwarnings(False)
 GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 # LED setup
@@ -77,22 +78,3 @@ def measure():
     except KeyboardInterrupt:
         print("Stop measurement")
         GPIO.cleanup()
-
-'''
-def led_off():
-    print("LED off")
-
-
-def led_left():
-    print("LED left")
-
-def led_right():
-    print("LED right")
-
-
-def led_stop():
-    print("LED Stop")
-
-
-def distance():
-    print ("Distance")
