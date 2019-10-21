@@ -1,18 +1,19 @@
 RemoteControlCar
+Control on webapp, SSH via Wifi
 
-1. Control on webapp, ssh via Wifi
+Main features include:
+- Stream video from RaspberryPi to the Web. 
+- Receive distance to nearest objects and display according alert on the web.
+- Can be controlled using both onscreen buttons and keyboard. 
 
+Web-app operation guide:
+1. Navigate to RemoteControlCar folder then run: "sudo python3 app.py".
+2. Press corresponding keyboard keys/buttons on Web. 
+3. Press turn off to terminate server.
 
-Webapp Operation:
-
-1. run command in terminal      "sudo python3 app.py".
-2. enter corresponding keys to control the motor/pressing button on UI.
-3. press turn off to terminate server.
-
-Key list
-w/upward key = run forward
-s/downward key = run backward
-a/left key = turn left
-d/right key = turn right
-x = stop
-
+Key list:
+- W/upward key = forward 
+- S/downward key = backward 
+- A/left key = turn left 
+- D/right key = turn right 
+- X/spacebar = stop
