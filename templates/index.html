@@ -17,13 +17,13 @@
 <article>
     <div class="video">
         <h1 align="center">Video Streaming for Raspberry Pi</h1>
-        <div align="center"><img src="{{ url_for('video_feed') }}" alt="Video printer"></div>
+        <div align="center"><img class="vid" src="{{ url_for('video_feed') }}" alt="Video printer"></div>
     </div>
     <div class="signal" align="center">
         <h3 align="center">State</h3>
 
         {#PRINT SELF-CHANGING TEXT#}
-        <p id="text_warning" onmousedown="print_change()">READY</p>
+        <p id="dist">Server Started</p>
     </div>
     <br/>
 
@@ -31,16 +31,18 @@
         <h3 align="center">Control Center</h3>
         <text id="kp"></text>
         <p>
-            <button class="up" onclick="move_up()"><span>&#8593;</span></button>
+            <button class="up" onclick="moveUp()"><span>&#8593;</span></button>
         </p>
         <p>
-            <button class="left" onclick="move_left()"><span>&#8592;</span></button>
-            <button class="stop" onclick="move_stop()">X</button>
-            <button class="right" onclick="move_right()"><span>&#8594;</span></button>
+            <button class="left" onclick="moveLeft()"><span>&#8592;</span></button>
+{#            <img class="stop" onclick="javascript:moveStop()" src="img/06-512.png">#}
+            <button class="stop" onclick="moveStop()">X</button>
+            <button class="right" onclick="moveRight()"><span>&#8594;</span></button>
         </p>
         <p>
-            <button class="down" onclick="move_down()"><span>&#8595;</span></button>
+            <button class="down" onclick="moveDown()"><span>&#8595;</span></button>
         </p>
+
         <br><br>
         <input type="button" class="off" value="Turn Off" onclick="window.location.href='/log_out'"/>
 
