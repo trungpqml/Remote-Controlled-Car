@@ -1,84 +1,80 @@
-# def forward():
-#     print("Forward")
-#
-#
-# def backward():
-#     print("Backward")
-#
-#
-# def left():
-#     print("Left")
-#
-#
-# def right():
-#     print("Right")
-#
-#
-# def stop():
-#     print("Stop")
-
 import RPi.GPIO as GPIO
 
 GPIO.setmode(GPIO.BCM)
 
-Motor1A = 5
-Motor1B = 6
-Motor2A = 19
-Motor2B = 13
-en1 = 1
+#Define GPIO pins for motors
+"""
+LB = Left Backward
+LF = Left Forward
+RB = Right Backward
+RF = Right Forward
+enL = Control Left motor speed
+enR = Control Right motor speed
+"""
+MotorLB = 19
+MotorLF = 13
+MotorRB = 5
+MotorRF = 6
+enL = 7
+enR = 1
 
 GPIO.setwarnings(False)
-GPIO.setup(Motor1A, GPIO.OUT)
-GPIO.setup(Motor1B, GPIO.OUT)
-GPIO.setup(Motor2A, GPIO.OUT)
-GPIO.setup(Motor2B, GPIO.OUT)
-GPIO.setup(en1, GPIO.OUT)
+GPIO.setup(MotorLF, GPIO.OUT)
+GPIO.setup(MotorLB, GPIO.OUT)
+GPIO.setup(MotorRF, GPIO.OUT)
+GPIO.setup(MotorRB, GPIO.OUT)
+#Set frequency for 2 control speed pins
+pL = GPIO.PWM(enL, 1000)
+pR = GPIO.PWM(enR, 1000)
 
-p1 = GPIO.PWM(en1, 100)
-p1.start(75)
+#Set speed at the beginning
+a = 15
+pL.start(a)
+pR.start(a)
 
-GPIO.output(Motor1A, GPIO.LOW)
-GPIO.output(Motor1B, GPIO.LOW)
-GPIO.output(Motor2A, GPIO.LOW)
-GPIO.output(Motor2B, GPIO.LOW)
+#Set 2 motors to stop at the beginning
+GPIO.output(MotorLF, GPIO.LOW)
+GPIO.output(MotorLB, GPIO.LOW)
+GPIO.output(MotorRF, GPIO.LOW)
+GPIO.output(MotorRB, GPIO.LOW)
 
+#Reset both motors speed to the same value
+def reset(b):
+	pL.ChangeDutyCycle(b)
+	pR.ChangeDutyCycle(b)
 
-def forward():
-    print("Forward")
-    GPIO.output(Motor1A, GPIO.HIGH)
-    GPIO.output(Motor1B, GPIO.LOW)
-    GPIO.output(Motor2A, GPIO.HIGH)
-    GPIO.output(Motor2B, GPIO.LOW)
+#Stop motor
+def stop():
+	GPIO.output(MotorLF, GPIO.LOW)
+	GPIO.output(MotorLB, GPIO.LOW)
+	GPIO.output(MotorRF, GPIO.LOW)
+	GPIO.output(MotorRB, GPIO.LOW)
 
+#Clean GPIO set up
+def clean():
+	GPIO.cleanup()
+"""Control motors direction"""
 
 def backward():
-    print("Backward")
-    GPIO.output(Motor1A, GPIO.LOW)
-    GPIO.output(Motor1B, GPIO.HIGH)
-    GPIO.output(Motor2A, GPIO.LOW)
-    GPIO.output(Motor2B, GPIO.HIGH)
+	GPIO.output(MotorLB, GPIO.HIGH)
+	GPIO.output(MotorLF, GPIO.LOW)
+	GPIO.output(MotorRB, GPIO.HIGH)
+	GPIO.output(MotorRF, GPIO.LOW)
+	reset(a)
 
+def forward():
+	GPIO.output(MotorLB, GPIO.LOW)
+	GPIO.output(MotorLF, GPIO.HIGH)
+	GPIO.output(MotorRB, GPIO.LOW)
+	GPIO.output(MotorRF, GPIO.HIGH)
+	reset(a)
 
 def right():
-    print("Right")
-    GPIO.output(Motor1A, GPIO.HIGH)
-    GPIO.output(Motor1B, GPIO.LOW)
-    GPIO.output(Motor2A, GPIO.LOW)
-    GPIO.output(Motor2B, GPIO.HIGH)
-
+	reset(5)
+	pL.ChangeDutyCycle(25)
+	pR.ChangeDutyCycle(10)
 
 def left():
-    print("Left")
-    GPIO.output(Motor1A, GPIO.LOW)
-    GPIO.output(Motor1B, GPIO.HIGH)
-    GPIO.output(Motor2A, GPIO.HIGH)
-    GPIO.output(Motor2B, GPIO.LOW)
-
-
-def stop():
-    print("Stop")
-    GPIO.output(Motor1A, GPIO.LOW)
-    GPIO.output(Motor1B, GPIO.LOW)
-    GPIO.output(Motor2A, GPIO.LOW)
-    GPIO.output(Motor2B, GPIO.LOW)
-
+	reset(5)
+	pL.ChangeDutyCycle(5)
+	pR.ChangeDutyCycle(35)
